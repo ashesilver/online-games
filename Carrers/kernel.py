@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 import os,warnings,sys,time
-import pygame,pyperclip
+import pygame
 from pygame.locals import *
 
 __version__ = "0.1.0"
@@ -46,9 +46,11 @@ class Graphics(Resolutions):
 		#print(sys.argv)
 
 		if size!=(None,None):
-			(Graphics.screen_l,Graphics.screen_h) = size
+			Graphics.screen_l,Graphics.screen_h = size[0],size[1]
+			options["resolution"] = list(size)
 
 		Graphics.screen = pygame.display.set_mode(options["resolution"])
+
 		if [Graphics.screen_l,Graphics.screen_h] != options["resolution"] :
 			Graphics.screen_l = options["resolution"][0]
 			Graphics.screen_h = options["resolution"][1]
