@@ -9,8 +9,7 @@ while response == None:
     response = s.recv(128)
 print("connected to server !", response.decode("utf-8")[:-8])
 
-stream = Data(s)
+stream = Stream(s, way = "IN")
 
-stream.recieve()
-stream.unpack()
-print(stream.content)
+
+print(stream(retur = True))
