@@ -41,7 +41,7 @@ class Data(object):
 			self.content = types[headers.index(self.content[:2])](self.content[2:])
 		
 		elif self.content[:2] in "S!" :
-			self.content = self.content[:2]
+			self.content = self.content[2:]
 
 		if retur :
 			return self.content
@@ -86,7 +86,9 @@ class Stream(Data):
 				running = False
 		self.content = str(data[:-len(endbuffer)].decode(encoding))
 
-	def __call__(self, vartype = "str", splitter = ';', subtype = None, endbuffer = "-TRover-", encoding= "utf-8", retur = False) :
+	def __call__(self, content = None , vartype = "str", splitter = ';', subtype = None, endbuffer = "-TRover-", encoding= "utf-8", retur = False) :
+		if not(content is None) :
+			self.content = content
 		if self.way == "IN" :
 			self.recieve(endbuffer = endbuffer, encoding= encoding)
 			return self.unpack(retur = retur)

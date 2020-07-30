@@ -10,6 +10,6 @@ while response == None:
 print("connected to server !", response.decode("utf-8")[:-8])
 
 stream = Stream(s, way = "IN")
-
-
+print(stream(retur = True))
+print(stream(retur = True))
 print(stream(retur = True))

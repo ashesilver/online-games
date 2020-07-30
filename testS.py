@@ -11,4 +11,6 @@ while connection == None:
 	stream = Stream(client, "bonjouère", way = "OUT")
 	stream.send(f"hello {connection}")
 
-stream.send()
+stream("wassup", vartype = "str")
+stream(47,vartype = "int")
+stream([1,2,3,4,5], vartype = "list", subtype = "int")
