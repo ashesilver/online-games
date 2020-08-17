@@ -41,13 +41,19 @@ class Graphics(Resolutions):
 	screen_h = int(pygame.display.Info().current_h*90/100)
 	clock = pygame.time.Clock()
 
-	def __init__(self,size=(None,None)):
+	def __init__(self,size=(None,None),resRatio=16/9):
 
 		#print(sys.argv)
 
 		if size!=(None,None):
 			Graphics.screen_l,Graphics.screen_h = size[0],size[1]
 			options["resolution"] = list(size)
+		elif resRatio != 16/9 :
+			if Graphics.screen_l*resRatio >= Graphics.screen_h*resRatio :
+				Graphics.screen_l = int(Graphics.screen_h*resRatio)
+			else :
+				Graphics.screen_h = int(Graphics.screen_l*resRatio)
+			options["resolution"] = Graphics.screen_l,Graphics.screen_h
 
 		Graphics.screen = pygame.display.set_mode(options["resolution"])
 
