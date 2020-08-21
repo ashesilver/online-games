@@ -4,6 +4,8 @@ import os
 BORNEINF = 19995
 PORTS = [ i for i in range(BORNEINF,20000)]
 
+
+"""
 def get_available_port():
 	r=20000
 	with open("connection_list.txt",'r') as f :
@@ -31,10 +33,13 @@ def register_connection(port,name,adress):
 	with open("connection_list.txt",'a') as f:
 		f.write(f"(id)={name}::(client)={adress}::(host)={port}")
 	return
+"""
+
 
 while True :
+	"""
 	port = get_available_port()
 	sckt,stream,adress = await_connection(port)
 	stream.way = "IN"
-	register_connection(port,stream(),adress)
+	register_connection(port,stream(),adress)"""
 

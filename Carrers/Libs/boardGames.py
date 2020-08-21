@@ -22,7 +22,7 @@ class Dice(object):
 
 	def roll(self):
 		from random import randint
-		self.value = randint(self.size)
+		self.value = {"total" : randint(self.size), "details" : None}
 
 	def multiRoll(self, amount = 2, modifier = 0):
 		from random import randint
@@ -32,7 +32,7 @@ class Dice(object):
 			det.append(a)
 			r+=a
 
-		self.value = {"total" : r+modifier, "details" : det, "modifier" : modifier}
+		self.value = {"total" : r+modifier, "details" : det}
 
 	def __call__(self, amount=1, modifier = 0):
 		if amount > 1 :
@@ -59,10 +59,19 @@ class Deck():
 	def __init__(self, array = [], counts = []):
 		self.id_list = array
 		self.counts = counts
+		self.topcard = None
 
 	def chooseTopcard(self):
 		import random
 		self.topcard = random.choice([ x for x in self.id_list for i in range(self.counts[self.id_list.index(x)]) ])
+
+	def draw(self):
+		if self.topcard == None :
+			self.chooseTopcard()
+		self.counts[index(self.topcard)] -=1
+		res = self.topcard;self.topcard = None
+		return res
+
 
 	def __repr__(self):
 		return str([ x.__repr__() for x in self.id_list for i in range(self.counts[self.id_list.index(x)])  ])
@@ -152,10 +161,16 @@ class Bank(object):
 		m = self.total%i
 		return [ x+r for x in self.details(m) ]
 
+	def verify(self, amount=0):
+		return self.total - amount > 0
+
+
 	def transfer(self,other,amount=0):
-		
-		self.total += amount
-		other.total -= amount
+		if self.verify(amount):
+			self.total += amount
+			other.total -= amount
+		else :
+			return False
 
 
 

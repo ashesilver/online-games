@@ -1,6 +1,9 @@
 #socketdatamanager
 import socket
 
+IN = True
+OUT = False
+
 class Data(object):
 	"""docstring for SuperData"""
 
@@ -89,9 +92,31 @@ class Stream(Data):
 	def __call__(self, content = None , vartype = "str", splitter = ';', subtype = None, endbuffer = "-TRover-", encoding= "utf-8", retur = False) :
 		if not(content is None) :
 			self.content = content
-		if self.way == "IN" :
+		if self.way :
 			self.recieve(endbuffer = endbuffer, encoding= encoding)
 			return self.unpack(retur = retur)
 		else :
 			self.pack(vartype = vartype, splitter = splitter, subtype = subtype)
 			self.send(endbuffer = endbuffer, encoding= encoding)
+
+
+def create_socket(adr,port,server = False):
+	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	if server :
+		s.bind((adr, port))
+		s.listen(1)
+
+		connection = None
+		while connection == None:
+			client, connection = s.accept()
+		s.send(bytes(f"hello {connection}",encoding))
+
+	else :
+
+		s.connect((adr, port))
+		response = None
+		while response == None:
+		    response = s.recv(128)
+		print("connected to server !", response.decode("utf-8")[:-8])
+
+	return s
