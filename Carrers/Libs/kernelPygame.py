@@ -284,19 +284,16 @@ class Button(Graphics):
 		if (( self.zone[0][0] <= mp[0] and self.zone[0][0]+self.zone[1][0] >= mp[0] ) and ( self.zone[0][1] <= mp[1] and self.zone[0][1]+self.zone[1][1] >= mp[1] )):
 			if self.leftClick :
 				self.clicked = True
-				self.caption = self.name
 				self.toggle = True
 				return True
 			elif self.clicked and not self.leftClick :
 				self.clicked = False
-				del self.caption
 				return False
 			else :
 				self.hover = True
 		else :
 			if self.toggleMode and self.leftClick :
 				self.toggle = False
-			del self.caption
 			self.hover = False
 			self.clicked = False
 		return False
@@ -489,11 +486,12 @@ class Textzone(Graphics):
 		self.graphicUpdate()
 		
 		if options["debug"] :
-			#print("focus : {}, hov : {}".format(self.focused,self.hover))
-			#print("rendering text at {}".format(self))
-			#print(self._text)
-			#print(self.textBuffer)
-			#print(self.textBuffer + "___" + self._text)
+			"""
+			print("focus : {}, hov : {}".format(self.focused,self.hover))
+			print("rendering text at {}".format(self))
+			print(self._text)
+			print(self.textBuffer)
+			print(self.textBuffer + "___" + self._text)"""
 			pass
 		return self.textBuffer+self._text
 
