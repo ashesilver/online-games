@@ -1,7 +1,9 @@
 #!/bin/usr/python3
 # -*- coding:utf-8 -*-
 
-import os,warnings,sys,time
+import os,warnings,sys,time#,tools
+import Libs.tools as tools
+
 import pygame
 from pygame.locals import *
 
@@ -9,6 +11,9 @@ __version__ = "0.1.0"
 __file__ = sys.argv[0]
 __system_args__ = sys.argv[1:]
 __start_time__ = time.time()
+
+def resizeImage(image,newSize):
+	return pygame.transform.scale(image,newSize)
 
 class Resolutions():
 	"""Main class for all resolutions"""
@@ -318,7 +323,7 @@ class Textzone(Graphics):
 
 	instanceCount = 0
 
-	def __init__(self, fontsize, coordinates, maxlength = 100, text = "Enter your text here",lines = 1):
+	def __init__(self, fontsize, coordinates, maxlength = 100, text = "Enter your text here"):
 
 		Textzone.instanceCount+=1
 		del self.name
@@ -327,11 +332,10 @@ class Textzone(Graphics):
 		self.coordinates = coordinates
 		self.maxlength = maxlength
 		self.textfont = pygame.font.Font(None, self.fontsize)
-		self.lines = lines
 		self.focused = False
 		self.hover = False
 		self._text = ""
-		self.textBuffer = ""
+		#self.textBuffer = ""
 		self.base = text
 
 		self.keylogger = []
@@ -348,26 +352,11 @@ class Textzone(Graphics):
 
 	@text.setter
 	def text(self,value):
-		self._text = value[-self.maxlength:]
-		self.textBuffer = value[:-self.maxlength]
-
-		"""
-		buff = ""
-		i= 0
-		for x in value :
-			buff+=x
-			if x in [" ",".",","] or i==len(value)-1:
-				if i<len(value)-self.maxlength :
-					self.textBuffer+=buff
-				else :
-					self._text += buff
-				buff = ""
-			i+=1"""
+		self._text = tools.textwrapper(self.maxlength,value)
 		self.rendered = False
-		#self.write()
 
 	def write(self):
-		if self._text == "" and not(self.rendered):
+		if self.text == []:
 			if self.focused :
 				self.display = self.textfont.render(" ", True, (255,255,255))
 				self.rendered = True
@@ -380,34 +369,25 @@ class Textzone(Graphics):
 				self.display = self.textfont.render(self.base, True, (150,150,150))
 				self.rendered = True
 
-		elif not(self.rendered):
-			self.display = self.textfont.render(self._text, True, (0,0,0))
+			self.screen.blit(self.display, self.coordinates)
+
+		else:
+			line= 1
+			for x in self.text :
+				self.display = self.textfont.render(x, True, (0,0,0))
+				self.screen.blit(self.display, [self.coordinates[0],self.coordinates[1]+self.fontsize*line])
+				line+=1
 			self.rendered = True
-
-		if self.lines > 1 and self.textBuffer != "" :
-			currentline=0
-			for i in range(self.lines-1):
-				if len(self.textBuffer) > i*self.maxlength :
-					self.screen.blit( self.textfont.render(self.textBuffer[i*self.maxlength: (i+1)*self.maxlength if (i+1)*self.maxlength < len(self.textBuffer) else len(self.textBuffer)], True, (0,0,0)) , [self.coordinates[0],self.coordinates[1]+0.1*self.fontsize+(i)*self.fontsize])
-					currentline = i
-			self.screen.blit(self.display, [self.coordinates[0],self.coordinates[1]+0.1*self.fontsize+(currentline+1)*self.fontsize])
-
-		else :
-			self.screen.blit(self.display, [self.coordinates[0],self.coordinates[1]+0.1*self.fontsize])#+(line-1)*self.fontsize
 
 	def input(self):
 		if self.focused :
 			text = ""
 			verrMaj = False
 			keys = self.getKeys()
-			if "Backspace" in keys and self._text!="":
+			if "Backspace" in keys and self.text!=[]:
 				self.backspaceBuffer += 1
 				if (self.backspaceBuffer % 4) == 0 :
-					if self.textBuffer != "" :
-						self._text = self.textBuffer[-1:] + self._text[:-1]
-						self.textBuffer = self.textBuffer[:-1]
-					else :
-						self._text = self._text[:-1]
+					self.text = self.text [:-1] + self.text[-1][:-1]
 				"""if self._text == "":
 					self.focused = False"""
 				self.rendered = False
@@ -444,7 +424,7 @@ class Textzone(Graphics):
 
 	def mouseover(self):
 		mp = self.getMouse()
-		if (( self.coordinates[0] <= mp[0] and self.coordinates[0]+(self.fontsize+1)*self.maxlength >= mp[0] ) and ( self.coordinates[1] <= mp[1] and self.coordinates[1]+self.fontsize*(self.lines) >= mp[1] )):
+		if (( self.coordinates[0] <= mp[0] and self.coordinates[0]+(self.fontsize*0.5)*self.maxlength >= mp[0] ) and ( self.coordinates[1] <= mp[1] and self.coordinates[1]+self.fontsize*(len(self.text)) >= mp[1] )):
 			if self.leftClick :
 				self.focused = True
 				self.rendered = False
@@ -458,26 +438,20 @@ class Textzone(Graphics):
 			self.rendered = False
 			self.focused = False
 
-	def wrap(self,inp = ""):
-		if len(self._text)+len(inp) > self.maxlength :
-			self.textBuffer += self._text[:self.maxlength-len(self._text)+len(inp)]
-			self._text = self._text[len(self._text)+len(inp)-self.maxlength:]
-		return inp
-
-	def graphicUpdate(self):
+	def graphicUpdate(self,noInput=False):
 		if self.selected != "": #work in progress
 			size = self.textfont.size(self.selected)
 			pygame.draw.rect(self.screen, self.negative,[self.coordinates[0],self.coordinates[1],size[0],size[1]])
 
-
-		inpt = self.input()
-		inpt = self.wrap(inpt)
+		
+		inpt = self.input() if noInput else ""
 		if inpt != "":
-			self._text += inpt
-		self.write()
+			self.text = self.text[-1] + inpt
+		if not(self.rendered) :
+			self.write()
 
 
-		if self._text == "" and self.focused :
+		if self._text == [] and self.focused :
 			self.backspaceBuffer = 0
 
 
@@ -493,7 +467,7 @@ class Textzone(Graphics):
 			print(self.textBuffer)
 			print(self.textBuffer + "___" + self._text)"""
 			pass
-		return self.textBuffer+self._text
+		return self.text
 
 
 ######## Core

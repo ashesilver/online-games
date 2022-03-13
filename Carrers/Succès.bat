@@ -1,1 +1,1 @@
-"./Libs/python" -m Client.py -d -c "Jeu du succès"
+python -m Client.py -d -c "Jeu du succès"

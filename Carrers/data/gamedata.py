@@ -4,33 +4,81 @@ cards = {
 
 		"cards" :
 		[
-			("opt1","Opportunité de devenir agriculteur","vous devez satisfaire aux conditions d'admission"),
-			("opt2","Opportunité d'aller à l'université","vous devez satisfaire	aux conditions d'admission"),
-			("opt3","Opportunité d'entrer dans les affaires","vous devez satisfaire	aux conditions d'admission"),
-			("opt4","Opportunité de partir en mer","vous devez satisfaire aux conditions d'admission"),
-			("opt5","Opportunité de faire de la politique", "vous devez satisfaire aux conditions d'admission"),
-			("opt6","Opportunité de faire du cinéma", "vous devez satisfaire aux conditions d'admission"),
-			("opt7","Opportunité de participer à la prospection d'uranium", "vous devez satisfaire aux conditions d'admission"),
-			("opt8","Opportunité de partir à la conquête de l'espace", "vous devez satisfaire aux conditions d'admission"),
-			("opt9","Opportunité Spéciale de rejoindre la carrière de votre choix", "vous devez satisfaire aux conditions d'admission"),
-			("opt4s","Opportunité Spéciale de partir en mer à bord d'une croisière où vous doublerez vos coeurs", "vous devez satisfaire aux conditions d'admission"),
-			("opt5s","Opportunité Spéciale de faire de la politique", "Grâce à votre habilité donner des poignées de main, vos frais d'admission sont payés"),
-			("opt6s","Opportunité Spéciale de faire du cinéma","Grâce à votre agréable physique, vos frais d'admission sont payés"),
-			("opt7s","Opportunité Spéciale de participer à la prospection d'uranium","Grâce à vos talents de grimpeur, vos frais d'admission sont payés"),
-			("opt8s","Opportunité Spéciale de partir à la conquête de l'espace","Grâce à vos capacités de navigateur, vos frais d'admission sont payés")
+			[("opt1","Opportunité de devenir agriculteur","vous devez satisfaire aux conditions d'admission"),4],
+			[("opt2","Opportunité d'aller à l'université","vous devez satisfaire	aux conditions d'admission"),7],
+			[("opt3","Opportunité d'entrer dans les affaires","vous devez satisfaire	aux conditions d'admission"),11],
+			[("opt4","Opportunité de partir en mer","vous devez satisfaire aux conditions d'admission"),14],
+			[("opt5","Opportunité de faire de la politique", "vous devez satisfaire aux conditions d'admission"),19],
+			[("opt6","Opportunité de faire du cinéma", "vous devez satisfaire aux conditions d'admission"),22],
+			[("opt7","Opportunité de participer à la prospection d'uranium", "vous devez satisfaire aux conditions d'admission"),27],
+			[("opt8","Opportunité de partir à la conquête de l'espace", "vous devez satisfaire aux conditions d'admission"),30],
+			[("opt9","Opportunité Spéciale de rejoindre la carrière de votre choix", "vous devez satisfaire aux conditions d'admission"),-1],
+			[("opt4s","Opportunité Spéciale de partir en mer à bord d'une croisière où vous doublerez vos coeurs", "vous devez satisfaire aux conditions d'admission"),14],
+			[("opt5s","Opportunité Spéciale de faire de la politique", "Grâce à votre habilité donner des poignées de main, vos frais d'admission sont payés"),19],
+			[("opt6s","Opportunité Spéciale de faire du cinéma","Grâce à votre agréable physique, vos frais d'admission sont payés"),22],
+			[("opt7s","Opportunité Spéciale de participer à la prospection d'uranium","Grâce à vos talents de grimpeur, vos frais d'admission sont payés"),27],
+			[("opt8s","Opportunité Spéciale de partir à la conquête de l'espace","Grâce à vos capacités de navigateur, vos frais d'admission sont payés"),30]
 		],
 		"count": [3,3,3,2,2,2,2,2,2,1,1,1,1,1],
 		"supp" : [1,1,1,1,1,1,1,1,1,0,0,0,0,0]
 	},
 	"exp" : 
 	{
-		"cards" :[("exp1","Déplacez-vous de 1 case",""),
-			("exp2","Déplacez-vous de 2 cases",""),
-			("exp3","Déplacez-vous de 3 cases",""),
-			("exp4","Déplacez-vous de 4 cases","")
+		"cards" :
+		[
+			[("exp1","Déplacez-vous de 1 case",""),1],
+			[("exp2","Déplacez-vous de 2 cases",""),2],
+			[("exp3","Déplacez-vous de 3 cases",""),3],
+			[("exp4","Déplacez-vous de 4 cases",""),4]
 		],
 		"count" : [8,8,8,8],
 		"supp" : [2,2,2,2]
 	}
 
+}
+board = { "squares" :
+	[
+	(0, [0, 1, 2, 6]),
+	(1, [0, 1, 2, 6]),
+	(2, [0, 1, 2, 6]),
+	(3, [0, 1, 2, 6]),
+	(4, [0,1,2,6,7,8]),
+	(5, [0, 1, 2, 6]),
+	(6, [0, 1, 2, 6]),
+	(7, [0,1,2,6,7,8]),
+	(8, [3,5]),		#hopital
+	(9, [0, 1, 2, 6]),
+	(10, [0, 1, 2, 6]),
+	(11, [0,1,2,6,7,8]),
+	(12, [0, 1, 2, 6]),
+	(13, [0, 1, 2, 6]),
+	(14, [0,1,2,6,7,8]),
+	(15, [0, 1, 2, 6]),
+	(16, [3,5]),	#chomage
+	(17, [0, 1, 2, 6]),
+	(18, [0, 1, 2, 6]),
+	(19, [0,1,2,6,7,8]),
+	(20, [0, 1, 2, 6]),
+	(21, [0, 1, 2, 6]),
+	(22, [0,1,2,6,7,8]),
+	(23, [0, 1, 2, 6]),
+	(24, [3,5]),	#Vacances
+	(25, [0, 1, 2, 6]),
+	(26, [0, 1, 2, 6]),
+	(27, [0,1,2,6,7,8]),
+	(28, [0, 1, 2, 6]),
+	(29, [0, 1, 2, 6]),
+	(30, [0,1,2,6,7,8]),
+	(31, [0, 1, 2, 6]),
+	(32, [0,1,2]),
+	(33, [0,1,2]),
+	(34, [0,1,2]),
+	(35, [0,1,2]),
+	(36, [0,1,2]),
+	(37, [0,1,2]),
+	(38, [0,1,2]),
+	(39, [0,1,2]),
+	(100, [0, 1, 2, 6]), (101, [0, 1, 2, 6]), (102, [0, 1, 2, 6]), (103, [0, 1, 2, 6]), (104, [0, 1, 2, 6]), (105, [0, 1, 2, 6]), (106, [0, 1, 2, 6]), (107, [0, 1, 2, 6]), (108, [0, 1, 2, 6]), (109, [0, 1, 2, 6]), (110, [0, 1, 2, 6]), (111, [0, 1, 2, 6]), (112, [0, 1, 2, 6]), (113, [0, 1, 2, 6]), (114, [0, 1, 2, 6]), (115, [0, 1, 2, 6]), (116, [0, 1, 2, 6]), (117, [0, 1, 2, 6]), (118, [0, 1, 2, 6]), (119, [0, 1, 2, 6]), (120, [0, 1, 2, 6]), (121, [0, 1, 2, 6]), (122, [0, 1, 2, 6]), (123, [0, 1, 2, 6]), (124, [0, 1, 2, 6]), (125, [0, 1, 2, 6]), (126, [0, 1, 2, 6]), (127, [0, 1, 2, 6]), (128, [0, 1, 2, 6]), (129, [0, 1, 2, 6]), (130, [0, 1, 2, 6]), (131, [0, 1, 2, 6]), (132, [0, 1, 2, 6]), (133, [0, 1, 2, 6]), (134, [0, 1, 2, 6]), (135, [0, 1, 2, 6]), (136, [0, 1, 2, 6]), (137, [0, 1, 2, 6]), (138, [0, 1, 2, 6]), (139, [0, 1, 2, 6]), (140, [0, 1, 2, 6]), (141, [0, 1, 2, 6]), (142, [0, 1, 2, 6]), (143, [0, 1, 2, 6]), (144, [0, 1, 2, 6]), (145, [0, 1, 2, 6]), (146, [0, 1, 2, 6]), (147, [0, 1, 2, 6]), (148, [0, 1, 2, 6]), (149, [0, 1, 2, 6]), (150, [0, 1, 2, 6]), (151, [0, 1, 2, 6]), (152, [0, 1, 2, 6]), (153, [0, 1, 2, 6]), (154, [0, 1, 2, 6]), (155, [0, 1, 2, 6]), (156, [0, 1, 2, 6]), (157, [0, 1, 2, 6]), (158, [0, 1, 2, 6]), (159, [0, 1, 2, 6]), (160, [0, 1, 2, 6]), (161, [0, 1, 2, 6]), (162, [0, 1, 2, 6]), (163, [0, 1, 2, 6]), (164, [0, 1, 2, 6]), (165, [0, 1, 2, 6]), (166, [0, 1, 2, 6]), (167, [0, 1, 2, 6]), (168, [0, 1, 2, 6]), (169, [0, 1, 2, 6]), (170, [0, 1, 2, 6]), (171, [0, 1, 2, 6]), (172, [0, 1, 2, 6]), (173, [0, 1, 2, 6]), (174, [0, 1, 2, 6]), (175, [0, 1, 2, 6]), (176, [0, 1, 2, 6]), (177, [0, 1, 2, 6]), (178, [0, 1, 2, 6]), (179, [0, 1, 2, 6]), (180, [4]), (181, [4]), (182, [4])
+	],
+	"pos":[[797, 807], [683, 799], [592, 805], [505, 809], [411, 804], [328, 806], [249, 813], [156, 813], [47, 815], [36, 687], [35, 602], [38, 513], [37, 424], [35, 336], [37, 249], [40, 158], [43, 42], [158, 36], [246, 34], [335, 37], [417, 34], [510, 37], [596, 37], [680, 38], [799, 44], [786, 152], [788, 238], [787, 330], [792, 415], [799, 508], [800, 591], [803, 686], [402, 749], [182, 747], [109, 490], [99, 269], [357, 103], [577, 101], [746, 358], [746, 579], [404, 712], [403, 668], [403, 624], [402, 579], [359, 579], [315, 578], [314, 624], [315, 666], [315, 712], [183, 712], [184, 666], [225, 666], [227, 623], [226, 580], [182, 577], [137, 579], [137, 490], [184, 490], [227, 490], [270, 490], [270, 447], [273, 401], [272, 357], [227, 357], [184, 357], [182, 400], [137, 400], [138, 268], [183, 268], [227, 269], [270, 268], [271, 224], [271, 181], [227, 181], [184, 180], [184, 137], [359, 136], [358, 180], [358, 224], [359, 268], [403, 269], [446, 270], [490, 268], [491, 225], [490, 181], [447, 181], [448, 137], [577, 136], [577, 182], [578, 225], [577, 268], [621, 269], [664, 271], [665, 224], [665, 182], [709, 182], [707, 359], [663, 358], [619, 358], [577, 358], [577, 402], [578, 446], [579, 491], [622, 490], [666, 492], [665, 447], [709, 446], [710, 579], [666, 579], [622, 579], [578, 580], [536, 580], [490, 578], [493, 623], [493, 665], [535, 666], [579, 666], [621, 667], [666, 668], [666, 710], [167, 652], [289, 512], [158, 205]]
 }

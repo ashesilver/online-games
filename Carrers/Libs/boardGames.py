@@ -9,6 +9,7 @@ class Dice(object):
 	def __init__(self, size):
 		self.size = size
 		self.history = []
+		self._value = 0
 
 	@property
 	def value(self):
@@ -22,13 +23,13 @@ class Dice(object):
 
 	def roll(self):
 		from random import randint
-		self.value = {"total" : randint(self.size), "details" : None}
+		self.value = {"total" : randint(0,self.size), "details" : None}
 
 	def multiRoll(self, amount = 2, modifier = 0):
 		from random import randint
 		det,r = [],0
 		for i in range(amount):
-			a = randint(self.size)
+			a = randint(0,self.size)
 			det.append(a)
 			r+=a
 
@@ -51,9 +52,6 @@ class Card(object):
 		self.effect = None
 		self.id = id
 
-	def __repr__(self):
-		return self.description
-
 class Deck():
 	"""docstring for Deck"""
 	def __init__(self, array = [], counts = []):
@@ -68,23 +66,19 @@ class Deck():
 	def draw(self):
 		if self.topcard == None :
 			self.chooseTopcard()
-		self.counts[index(self.topcard)] -=1
+		self.counts[self.id_list.index(self.topcard)] -=1
 		res = self.topcard;self.topcard = None
 		return res
-
-
-	def __repr__(self):
-		return str([ x.__repr__() for x in self.id_list for i in range(self.counts[self.id_list.index(x)])  ])
 
 
 
 
 class Square(object):
 	"""docstring for Square"""
-	def __init__(self, id):
-		self.id_list = id
-
-		self.effect = None
+	def __init__(self, id, actions=None, effect=None):
+		self.id = id
+		self.actions = actions
+		self.effect = effect
 
 class Board():
 	"""docstring for Board"""
@@ -133,7 +127,7 @@ class BankNote(object):
 class Bank(object):
 	"""docstring for Bank"""
 	def __init__(self, bankNotes = (BankNote(0)), total = 0):
-		self.banknotes_array = sorted(bankNotes)[::-1]
+		self.banknotes_array = bankNotes#sorted(bankNotes)[::-1]
 		#self.amount = amount if (amount!= None and len(amount)==len(bankNotes)) else [0 for x in bankNotes]
 		self.total = total
 	
@@ -166,7 +160,12 @@ class Bank(object):
 
 
 	def transfer(self,other,amount=0):
-		if self.verify(amount):
+		tmp,i=0,0
+		for x in self.details(amount):
+			tmp += x*self.banknotes_array[i].value
+			i+=1
+		amount=tmp
+		if other.verify(amount):
 			self.total += amount
 			other.total -= amount
 		else :
@@ -177,11 +176,12 @@ class Bank(object):
 
 class Inventory():
 	"""docstring for Inventory"""
-	def __init__(self, *args):
-		self.container
+	pass
 
 class Player():
- 	"""docstring for Player"""
- 	def __init__(self):
- 		self.inventory = Inventory()
- 		self.money = Bank()
+	"""docstring for Player"""
+	def __init__(self,id=None,name="Eric",bank=False,inventory=False):
+		self.id = id
+		self.name = name
+		self.inventory = Inventory() if inventory else None
+		self.money = Bank(**bank if type(bank)==dict else bank) if bank else None
