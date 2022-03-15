@@ -243,7 +243,7 @@ class Button(Graphics):
 	"""UI clickable elements """
 
 	instanceCount = 0
-	def __init__(self,pos,size,*imgadr,toggle = False):
+	def __init__(self,pos,size,*imgadr,toggle = False,anchor =False,onclick_func = None):
 
 		Button.instanceCount += 1
 		del self.name
@@ -257,7 +257,11 @@ class Button(Graphics):
 		}
 		(self.base, self.onclick, self.hov) = imgadr
 		self.toggleMode = toggle
+		self.anchor_mode = anchor
+		
 		self.toggle = False
+
+		self.onclick_func = onclick_func
 
 	@property
 	def base(self):
@@ -289,7 +293,7 @@ class Button(Graphics):
 		if (( self.zone[0][0] <= mp[0] and self.zone[0][0]+self.zone[1][0] >= mp[0] ) and ( self.zone[0][1] <= mp[1] and self.zone[0][1]+self.zone[1][1] >= mp[1] )):
 			if self.leftClick :
 				self.clicked = True
-				self.toggle = True
+				self.toggle = not(self.toggle) or self.anchor_mode
 				return True
 			elif self.clicked and not self.leftClick :
 				self.clicked = False
@@ -297,7 +301,7 @@ class Button(Graphics):
 			else :
 				self.hover = True
 		else :
-			if self.toggleMode and self.leftClick :
+			if self.anchor_mode and self.leftClick :
 				self.toggle = False
 			self.hover = False
 			self.clicked = False
@@ -311,12 +315,15 @@ class Button(Graphics):
 		else :
 			self.displayActivatable({"image":self.imgdata["base"],"position":self.zone[0]})
 
-	def __call__(self):
+	def __call__(self,*args,**kwargs):
 		self.graphicUpdate()
-		if self.toggleMode :
-			self.mouseover()
+		res = self.mouseover()
+		if self.onclick_func != None and res:
+			return self.onclick_func(*args,**kwargs)
+		elif self.toggleMode :	
 			return self.toggle
-		return self.mouseover()
+		else :
+			return res
 
 class Textzone(Graphics):
 	"""docstring for Textzone"""
@@ -334,16 +341,14 @@ class Textzone(Graphics):
 		self.textfont = pygame.font.Font(None, self.fontsize)
 		self.focused = False
 		self.hover = False
-		self._text = ""
-		#self.textBuffer = ""
+		self.text = ""
 		self.base = text
 
 		self.keylogger = []
 		self.backspaceBuffer = 0
-		self.rendered = False
+		self.rendered = []
 
 		self.selected = ""
-		#self.
 		self.negative = (75,75,75,25)
 
 	@property
@@ -353,31 +358,28 @@ class Textzone(Graphics):
 	@text.setter
 	def text(self,value):
 		self._text = tools.textwrapper(self.maxlength,value)
-		self.rendered = False
+		self.rendered = []
 
 	def write(self):
-		if self.text == []:
-			if self.focused :
-				self.display = self.textfont.render(" ", True, (255,255,255))
-				self.rendered = True
+		if self.rendered == []:
+			if self.text == []:
+				if self.focused :
+					self.rendered = [self.textfont.render(" ", True, (255,255,255))]
 
-			elif self.hover :
-				self.display = self.textfont.render(self.base, True, (75,75,75))
-				self.rendered = True
+				elif self.hover :
+					self.rendered = [self.textfont.render(self.base, True, (75,75,75))]
 
-			elif not(self.focused):
-				self.display = self.textfont.render(self.base, True, (150,150,150))
-				self.rendered = True
+				elif not(self.focused):
+					self.rendered = [self.textfont.render(self.base, True, (150,150,150))]
 
-			self.screen.blit(self.display, self.coordinates)
-
-		else:
-			line= 1
-			for x in self.text :
-				self.display = self.textfont.render(x, True, (0,0,0))
-				self.screen.blit(self.display, [self.coordinates[0],self.coordinates[1]+self.fontsize*line])
-				line+=1
-			self.rendered = True
+			else:
+				for x in self.text :
+					self.rendered.append(self.textfont.render(x, True, (0,0,0)))
+		
+		line= 0
+		for x in self.rendered :
+			self.screen.blit(x, [self.coordinates[0],self.coordinates[1]+self.fontsize*line])
+			line+=1
 
 	def input(self):
 		if self.focused :
@@ -387,10 +389,9 @@ class Textzone(Graphics):
 			if "Backspace" in keys and self.text!=[]:
 				self.backspaceBuffer += 1
 				if (self.backspaceBuffer % 4) == 0 :
-					self.text = self.text [:-1] + self.text[-1][:-1]
+					self.text = self.text [:-1] + [self.text[-1][:-1]]
 				"""if self._text == "":
 					self.focused = False"""
-				self.rendered = False
 				return ""
 			elif "Enter" in keys or "ENTER" in keys :
 				self.focused = False
@@ -414,7 +415,7 @@ class Textzone(Graphics):
 					except Exception as e:
 						raise e
 					else :
-						self.rendered = False
+						self.rendered = []
 			for x in self.keylogger:
 				if not x in keys :
 					self.keylogger.pop(self.keylogger.index(x))
@@ -424,18 +425,18 @@ class Textzone(Graphics):
 
 	def mouseover(self):
 		mp = self.getMouse()
-		if (( self.coordinates[0] <= mp[0] and self.coordinates[0]+(self.fontsize*0.5)*self.maxlength >= mp[0] ) and ( self.coordinates[1] <= mp[1] and self.coordinates[1]+self.fontsize*(len(self.text)) >= mp[1] )):
+		if (( self.coordinates[0] <= mp[0] and self.coordinates[0]+(self.fontsize*0.5)*self.maxlength >= mp[0] ) and ( self.coordinates[1] <= mp[1] and self.coordinates[1]+(self.fontsize*(len(self.text)+int(self.text == []))) >= mp[1] )):
 			if self.leftClick :
 				self.focused = True
-				self.rendered = False
+				self.rendered = []
 			else :
 				self.hover = True
-				self.rendered = False
+				self.rendered = []
 		elif self.hover :
 			self.hover = False
-			self.rendered = False
+			self.rendered = []
 		elif self.leftClick :
-			self.rendered = False
+			self.rendered = []
 			self.focused = False
 
 	def graphicUpdate(self,noInput=False):
@@ -444,11 +445,13 @@ class Textzone(Graphics):
 			pygame.draw.rect(self.screen, self.negative,[self.coordinates[0],self.coordinates[1],size[0],size[1]])
 
 		
-		inpt = self.input() if noInput else ""
-		if inpt != "":
-			self.text = self.text[-1] + inpt
-		if not(self.rendered) :
-			self.write()
+		inpt = self.input() if not(noInput) else ""
+		if inpt != "" :
+			if 	self.text != []:
+				self.text = self.text[:-1] + [self.text[-1] + inpt]
+			else :
+				self.text = inpt
+		self.write()
 
 
 		if self._text == [] and self.focused :

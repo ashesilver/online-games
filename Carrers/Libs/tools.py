@@ -59,9 +59,9 @@ def textwrapper(wrap_size,input_arg,on_spacer=True,spacer_whole_word =False,spac
 	return retlist[:]
 
 def non_module_exec() :
-	a = "lets you specify how many times to split,\n while str.rpartition() only splits once but always returns a fixed number of elements (prefix, delimiter & postfix) and is faster for the single split case."
+	a = "coeurs ! étoiles ! brouzoufs ! salaire "
 	b = ""
-	print(textwrapper(25,b))
+	print(textwrapper(5,b))
 
 if __name__ == '__main__':
  	non_module_exec()

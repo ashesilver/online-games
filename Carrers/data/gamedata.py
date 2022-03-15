@@ -36,6 +36,8 @@ cards = {
 	}
 
 }
+
+#"Dés"*(i==0)+"Opportunité"*(i==1)+"Expérience"*(i==2)+"Payer"*(i==3)+"Passer tour"*(i==4)+"Sortir (Dés)"*(i==5)+"Vacances"*(i==6)+"Carrière"*(i==7)+"Plateau"*(i==8)
 board = { "squares" :
 	[
 	(0, [0, 1, 2, 6]),

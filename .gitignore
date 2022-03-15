@@ -128,3 +128,6 @@ dmypy.json
 
 #pygame installation
 pygame/
+
+#dev-only assets & sprites
+Carrers/sprites/Board.helper.jpg

@@ -132,7 +132,7 @@ while not (exit) :
 			if delPlayerButtons[i]() and deactivate>30 :
 				#del players[i],delPlayerButtons[i]
 				deactivate = 0
-				tmp = [x.text if x.text!= "" else x.base for x in players]
+				tmp = [x.text if x.text!= [] else x.base for x in players]
 				del tmp[i],players,delPlayerButtons,selectColors
 				del colors[i]
 				players,delPlayerButtons,selectColors = [],[],[]
@@ -193,11 +193,11 @@ while not (exit) :
 			
 			Lune = {"position" : [int(900*screen_ratio),0],"image" : window.load_image(f"./sprites/carrer.L.png",[int(300*screen_ratio),int(500*screen_ratio)])}
 
-			inventoryTextzone = kernelPygame.Textzone(25,[ZOOM["pos"][0]+int(5*screen_ratio),ZOOM["pos"][1]+int(5*screen_ratio)],maxlength=35,text = "Coeurs : 0 // Etoiles : 0 // ßrouzoufs : 0 // Salaire : 0")
+			inventoryTextzone = kernelPygame.Textzone(25,[ZOOM["pos"][0]+int(5*screen_ratio),ZOOM["pos"][1]+int(5*screen_ratio)],maxlength=20,text = "Coeurs : 0 // Etoiles : 0 // ßrouzoufs : 0 // Salaire : 0")
 
 			actionButtons = []
 			for i in range(11) :
-				actionButtons.append(kernelPygame.Textzone(25,[int((935+(150*((i if i<8 else i-1)>4)))*screen_ratio),int((372+(50*((i if i<8 else i-1)%5)))*screen_ratio)],maxlength= 12,
+				actionButtons.append(kernelPygame.Textzone(25,[int((935+(150*((i if i<=8 else i-1)>4)))*screen_ratio),int((372+(25*((i%4 if i<=8 else i%6))))*screen_ratio)],maxlength= 12,
 				text = "Dés"*(i==0)+"Opportunité"*(i==1)+"Expérience"*(i==2)+"Payer"*(i==3)+"Passer tour"*(i==4)+"Sortir (Dés)"*(i==5)+"Vacances"*(i==6)+"Carrière"*(i==7)+"Plateau"*(i==8)+"Confirmer"*(i==9)+"Actions"*(i==10)))
 				actionButtons[i].id = i
 			actions = False
@@ -358,13 +358,14 @@ while not (exit) :
 
 		#!!! inventaires !!!
 		for x in players:
+			rendered_playername = x.name.rendered
 			x.name.mouseover()
 			#!!! cheese strat !!!
-			x.name.rendered = True
+			x.rendered = rendered_playername
 			x.name.graphicUpdate(True)
 			if x.inventory.button() or (x.name.focused and x.name.hover):
 				zoomTargetText.text=f"Inventaire de : {x.name.base[4:]}"
-				inventoryTextzone.text = f"Coeurs : {x.inventory.hearts} // Etoiles : {x.inventory.stars} // ßrouzoufs : {x.money.total} // Salaire : {x.inventory.salary}"
+				inventoryTextzone._text= f"Coeurs : {x.inventory.hearts}\nEtoiles : {x.inventory.stars}\nßrouzoufs : {x.money.total}\nSalaire : {x.inventory.salary}".split('\n')
 				
 				"""
 				for x in x.decks :
@@ -451,7 +452,7 @@ while not (exit) :
 		if not displayLune :
 			zoomTargetText.graphicUpdate()
 			if inventory :
-				inventoryTextzone.graphicUpdate()
+				inventoryTextzone.graphicUpdate(noInput = True)
 			else :
 				window.displayActivatable(zoomTarget)
 		else :
